@@ -90,11 +90,14 @@ var upperCasedCharacters = [
 
 // Function to prompt user for password options
 function getPasswordOptions() {
-  let passLength = prompt("Password length 10-65 characters?");
-  let lowChar = confirm("Include lowercase Y/N?");
-  let upperChar = confirm("Include UpperCase Y/N?");
-  let numericChar = confirm("Include numbers Y/N?");
-  let specialChar = confirm("Include special characters Y/N?");
+  var passOptions = {
+    passLength: prompt("Password length 10-65 characters?"),
+    lowChar: confirm("Include lowercase Y/N?"),
+    upperChar: confirm("Include UpperCase Y/N?"),
+    numericChar: confirm("Include numbers Y/N?"),
+    specialChar: confirm("Include special characters Y/N?")
+  }
+  return passOptions;
 }
 
 // Function for getting a random element from an array
@@ -112,7 +115,7 @@ var generateBtn = document.querySelector("#generate");
 function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
-
+  console.log(getPasswordOptions());
   passwordText.value = password;
 }
 
