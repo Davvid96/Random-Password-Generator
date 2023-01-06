@@ -90,13 +90,22 @@ var upperCasedCharacters = [
 
 // Function to prompt user for password options
 function getPasswordOptions() {
+  var passLenVal = Number(prompt("Password length 10-65 characters?"));
+  if (!isNaN(passLenVal)) 
+
+
+  var passLowVal = confirm("Include lowercase Y/N?");
+  var passUpperVal= confirm("Include UpperCase Y/N?");
+  var passNumVal = confirm("Include numbers Y/N?");
+  var passSpecVal = confirm("Include special characters Y/N?");
+
   var passOptions = {
     passLength: prompt("Password length 10-65 characters?"),
     lowChar: confirm("Include lowercase Y/N?"),
     upperChar: confirm("Include UpperCase Y/N?"),
     numericChar: confirm("Include numbers Y/N?"),
-    specialChar: confirm("Include special characters Y/N?")
-  }
+    specialChar: confirm("Include special characters Y/N?"),
+  };
   return passOptions;
 }
 
@@ -105,13 +114,22 @@ function getRandom(arr) {}
 
 // Function to generate password with user input
 function generatePassword(userOptions) {
-  console.log(userOptions)
+  console.log(userOptions);
+
+  // User selects Character types
   var passChars = [];
-  if (userOptions.lowChar === true) passChars = [...passChars, ...lowerCasedCharacters];
-  if (userOptions.upperChar === true) passChars = [...passChars, ...upperCasedCharacters];
-  if (userOptions.numericChar === true) passChars = [...passChars, ...numericCharacters];
-  if (userOptions.specialChar === true) passChars = [...passChars, ...specialCharacters];
-  console.log(passChars);
+  if (userOptions.lowChar)
+    passChars = [...passChars, ...lowerCasedCharacters];
+  if (userOptions.upperChar)
+    passChars = [...passChars, ...upperCasedCharacters];
+  if (userOptions.numericChar)
+    passChars = [...passChars, ...numericCharacters];
+  if (userOptions.specialChar)
+    passChars = [...passChars, ...specialCharacters];
+
+      // User selects Password Length
+  var passLen = Number(userOptions.passLength);
+
 
 }
 
@@ -122,10 +140,21 @@ var generateBtn = document.querySelector("#generate");
 function writePassword() {
   var userOptions = getPasswordOptions();
   var password = generatePassword(userOptions);
+
+  // Regex Character type validator 
+  var regexString = `(${userOptions.numericChar ? '(?=.*\\d)' : ''}${userOptions.lowChar ? '(?=.*[a-z])' : ''}${userOptions.upperChar ? '(?=.*[A-Z])' : ''}${userOptions.specialChar ? '(?=.*[\\W])' : ''}.{${Number(userOptions.passLength)},})`;
+  var regexExp = new RegExp(regexString);
+
+  // Regex Character length validator 
+  var i = 0;
+  while (!regexExp.test(password) && i < 50) {
+    password = generatePassword(userOptions);
+    i++;
+  }
+
   var passwordText = document.querySelector("#password");
 
   passwordText.value = password;
-
 }
 
 // Add event listener to generate button
