@@ -90,94 +90,74 @@ var upperCasedCharacters = [
 
 // Function to prompt user for password options + Validation
 function getPasswordOptions() {
-  var passLenVal = Number(prompt("Password length 10-64 characters?"));
-  if (isNaN(passLenVal) || (passLenVal > 64 || passLenVal < 10)) {
-  alert('Invalid password Length'); 
-  return getPasswordOptions();
+  var passwordLength = Number(prompt("Password length 10-64 characters?"));
+  if (isNaN(passwordLength) || (passwordLength > 64 || passwordLength < 10)) {
+    alert('Invalid password Length'); 
+    return getPasswordOptions();
   }
 
-  var passLowVal = confirm("Include lowercase Y/N?");
-  var passUpperVal = confirm("Include UpperCase Y/N?");
-  var passNumVal = confirm("Include numbers Y/N?");
-  var passSpecVal = confirm("Include special characters Y/N?");
-  if (!passLowVal && !passUpperVal && !passNumVal && !passSpecVal) {
+  var passwordLowerCase = confirm("Include lowercase Y/N?");
+  var passwordUpperCase = confirm("Include UpperCase Y/N?");
+  var passwordNumbers = confirm("Include numbers Y/N?");
+  var passwordSpecialCharacters = confirm("Include special characters Y/N?");
+  if (!passwordLowerCase && !passwordUpperCase && !passwordNumbers && !passwordSpecialCharacters) {
     alert('Invalid password input'); 
     return getPasswordOptions();
   }
-    
-// Get Pass user options
+
   return {
-    passLength: passLenVal,
-    lowChar: passLowVal,
-    upperChar: passUpperVal,
-    numericChar: passNumVal,
-    specialChar: passSpecVal,
+    passwordLength,
+    passwordLowerCase,
+    passwordUpperCase,
+    passwordNumbers,
+    passwordSpecialCharacters,
   };
 }
 
-// Function for getting a random element from an array
-function getRandom(arr) {}
-
 // Function to generate password with user input
 function generatePassword(userOptions) {
-  console.log(userOptions);
-
   // User selects Character types
   var passChars = [];
-  if (userOptions.lowChar) passChars = [...passChars, ...lowerCasedCharacters];
-  if (userOptions.upperChar)
+  if (userOptions.passwordLowerCase) passChars = [...passChars, ...lowerCasedCharacters];
+  if (userOptions.passwordUpperCase)
     passChars = [...passChars, ...upperCasedCharacters];
-  if (userOptions.numericChar) passChars = [...passChars, ...numericCharacters];
-  if (userOptions.specialChar) passChars = [...passChars, ...specialCharacters];
-
-  // User selects Password Length
-  var passLen = Number(userOptions.passLength);
+  if (userOptions.passwordNumbers) passChars = [...passChars, ...numericCharacters];
+  if (userOptions.passwordSpecialCharacters) passChars = [...passChars, ...specialCharacters];
 
   // Password Generator
-  var randPassword = new Array(passLen)
+  var randPassword = new Array(userOptions.passwordLength)
     .fill(0)
-    .map((x) =>
-      (function (chars) {
-        let umax = Math.pow(2, 32),
-          r = new Uint32Array(1),
-          max = umax - (umax % chars.length);
-        do {
-          crypto.getRandomValues(r);
-        } while (r[0] > max);
-        return chars[r[0] % chars.length];
-      })(passChars)
-    )
+    .map((x) => passChars[(Math.random() * (passChars.length - 0) + 0).toFixed(0)])
     .join("");
   return randPassword;
 }
 
-// Get references to the #generate element
-var generateBtn = document.querySelector("#generate");
-
 // Write password to the #password input
 function writePassword() {
   var userOptions = getPasswordOptions();
-  var password = generatePassword(userOptions);
+  var randomPassword = generatePassword(userOptions);
 
   // Regex Character type validator
-  var regexString = `(${userOptions.numericChar ? "(?=.*\\d)" : ""}${
-    userOptions.lowChar ? "(?=.*[a-z])" : ""
-  }${userOptions.upperChar ? "(?=.*[A-Z])" : ""}${
-    userOptions.specialChar ? "(?=.*[\\W])" : ""
+  var regexString = `(${userOptions.passwordNumbers ? "(?=.*\\d)" : ""}${
+    userOptions.passwordLowerCase ? "(?=.*[a-z])" : ""
+  }${userOptions.passwordUpperCase ? "(?=.*[A-Z])" : ""}${
+    userOptions.passwordSpecialCharacters ? "(?=.*[\\W])" : ""
   }.{${Number(userOptions.passLength)},})`;
   var regexExp = new RegExp(regexString);
 
   // Regex Character length validator
   var i = 0;
-  while (!regexExp.test(password) && i < 50) {
-    password = generatePassword(userOptions);
+  while (!regexExp.test(randomPassword) && i < 50) {
+    randomPassword = generatePassword(userOptions);
     i++;
   }
 
   var passwordText = document.querySelector("#password");
 
-  passwordText.value = password;
+  passwordText.value = randomPassword;
 }
 
+// Get references to the #generate element
+var generateBtn = document.querySelector("#generate");
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
