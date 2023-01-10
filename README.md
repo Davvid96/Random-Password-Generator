@@ -41,7 +41,7 @@ An example 10 character password can be seen in the screenshot below:
 
 ## Regex:
 
-I think the hardest part of the challenge for me personally was to validate the end result displayed to the user after the password was generated as for example if the password was 10 characters, and the user would like to include all types of characters in their password. There was a chance that the password could generate without a number for example. Therefore, after some searching and a prompt from a buddy, I came across 'Regex' and it's 'community patterns' which helped in validating and testing the end result, and generating the password until it matched all criteria.
+I think the hardest part of the challenge for me personally was to validate the end result displayed to the user after the password was generated as for example if the password was 10 characters, and the user would like to include all types of characters in their password. There was a chance that the password could generate without a number for example. Therefore, after some researching and a prompt from a buddy, I came across 'Regex' and it's 'community patterns' which helped in validating and testing the end result, and generating the password until it matched all criteria.
 
 
 ## Conclusion:
@@ -51,5 +51,5 @@ I believe that this was on of the more complex challenges I have completed durin
 
 ## Deployment:
 
-* Following is a link to the final version of the Website: 'https://davvid96.github.io/Horiseon-Challenge/'
+* Following is a link to the final version of the Website: 'https://davvid96.github.io/Random-Password-Generator/'
 
